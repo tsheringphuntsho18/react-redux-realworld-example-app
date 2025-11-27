@@ -1,7 +1,6 @@
-import superagentPromise from 'superagent-promise';
 import _superagent from 'superagent';
 
-const superagent = superagentPromise(_superagent, global.Promise);
+const superagent = _superagent; // or just use _superagent directly
 
 const API_ROOT = 'http://localhost:8080/api';
 
