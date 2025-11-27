@@ -1,33 +1,32 @@
-import { Link } from 'react-router-dom';
-import ListErrors from './ListErrors';
-import React from 'react';
-import agent from '../agent';
-import { connect } from 'react-redux';
+import { Link } from "react-router-dom";
+import ListErrors from "./ListErrors";
+import React from "react";
+import agent from "../agent";
+import { connect } from "react-redux";
 import {
   UPDATE_FIELD_AUTH,
   LOGIN,
-  LOGIN_PAGE_UNLOADED
-} from '../constants/actionTypes';
+  LOGIN_PAGE_UNLOADED,
+} from "../constants/actionTypes";
 
-const mapStateToProps = state => ({ ...state.auth });
+const mapStateToProps = (state) => ({ ...state.auth });
 
-const mapDispatchToProps = dispatch => ({
-  onChangeEmail: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'email', value }),
-  onChangePassword: value =>
-    dispatch({ type: UPDATE_FIELD_AUTH, key: 'password', value }),
+const mapDispatchToProps = (dispatch) => ({
+  onChangeEmail: (value) =>
+    dispatch({ type: UPDATE_FIELD_AUTH, key: "email", value }),
+  onChangePassword: (value) =>
+    dispatch({ type: UPDATE_FIELD_AUTH, key: "password", value }),
   onSubmit: (email, password) =>
     dispatch({ type: LOGIN, payload: agent.Auth.login(email, password) }),
-  onUnload: () =>
-    dispatch({ type: LOGIN_PAGE_UNLOADED })
+  onUnload: () => dispatch({ type: LOGIN_PAGE_UNLOADED }),
 });
 
 class Login extends React.Component {
   constructor() {
     super();
-    this.changeEmail = ev => this.props.onChangeEmail(ev.target.value);
-    this.changePassword = ev => this.props.onChangePassword(ev.target.value);
-    this.submitForm = (email, password) => ev => {
+    this.changeEmail = (ev) => this.props.onChangeEmail(ev.target.value);
+    this.changePassword = (ev) => this.props.onChangePassword(ev.target.value);
+    this.submitForm = (email, password) => (ev) => {
       ev.preventDefault();
       this.props.onSubmit(email, password);
     };
@@ -40,31 +39,38 @@ class Login extends React.Component {
   render() {
     const email = this.props.email;
     const password = this.props.password;
+    const showGenericError =
+      this.props.errors &&
+      Object.keys(this.props.errors).length === 0 &&
+      this.props.inProgress === false;
+
     return (
       <div className="auth-page">
         <div className="container page">
           <div className="row">
-
             <div className="col-md-6 offset-md-3 col-xs-12">
               <h1 className="text-xs-center">Sign In</h1>
               <p className="text-xs-center">
-                <Link to="/register">
-                  Need an account?
-                </Link>
+                <Link to="/register">Need an account?</Link>
               </p>
 
               <ListErrors errors={this.props.errors} />
+              {showGenericError && (
+                <ul className="error-messages">
+                  <li>email or password is invalid</li>
+                </ul>
+              )}
 
               <form onSubmit={this.submitForm(email, password)}>
                 <fieldset>
-
                   <fieldset className="form-group">
                     <input
                       className="form-control form-control-lg"
                       type="email"
                       placeholder="Email"
                       value={email}
-                      onChange={this.changeEmail} />
+                      onChange={this.changeEmail}
+                    />
                   </fieldset>
 
                   <fieldset className="form-group">
@@ -73,20 +79,20 @@ class Login extends React.Component {
                       type="password"
                       placeholder="Password"
                       value={password}
-                      onChange={this.changePassword} />
+                      onChange={this.changePassword}
+                    />
                   </fieldset>
 
                   <button
                     className="btn btn-lg btn-primary pull-xs-right"
                     type="submit"
-                    disabled={this.props.inProgress}>
+                    disabled={this.props.inProgress}
+                  >
                     Sign in
                   </button>
-
                 </fieldset>
               </form>
             </div>
-
           </div>
         </div>
       </div>

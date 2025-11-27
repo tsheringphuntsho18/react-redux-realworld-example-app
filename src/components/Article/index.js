@@ -6,8 +6,6 @@ import { connect } from 'react-redux';
 import { marked } from "marked";
 import { ARTICLE_PAGE_LOADED, ARTICLE_PAGE_UNLOADED } from '../../constants/actionTypes';
 
-const html = marked(article.body);
-
 const mapStateToProps = state => ({
   ...state.article,
   currentUser: state.common.currentUser
